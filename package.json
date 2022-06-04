@@ -21,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "json-server": "json-server"
   },
   "eslintConfig": {
     "extends": [
@@ -43,8 +44,11 @@
     ]
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.0.2",
+    "@commitlint/config-conventional": "^17.0.2",
     "eslint-config-prettier": "^8.5.0",
     "husky": "^8.0.0",
+    "json-server": "^0.17.0",
     "lint-staged": "^13.0.0",
     "prettier": "^2.6.2",
     "pretty-quick": "^3.1.3"
