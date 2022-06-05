@@ -1,3 +1,4 @@
+import { Input, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
 
 export interface User {
@@ -20,7 +21,7 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
 		<form>
 			<div>
 				{/* {setParam(Object.assign({}, param, { name: e.target.value }))} */}
-				<input
+				<Input
 					type="text"
 					value={param.name}
 					onChange={(e) => {
@@ -29,23 +30,23 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
 							name: e.target.value,
 						})
 					}}
-				></input>
-				<select
+				></Input>
+				<Select
 					value={param.personId}
-					onChange={(e) => {
+					onChange={(value) => {
 						setParam({
 							...param,
-							personId: e.target.value,
+							personId: value,
 						})
 					}}
 				>
-					<option value={''}>负责人</option>
+					<Select.Option value={''}>负责人</Select.Option>
 					{users.map((user) => (
-						<option key={user.id} value={user.id}>
+						<Select.Option key={user.id} value={user.id}>
 							{user.name}
-						</option>
+						</Select.Option>
 					))}
-				</select>
+				</Select>
 			</div>
 		</form>
 	)
