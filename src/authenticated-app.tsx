@@ -9,7 +9,7 @@ import { useDocumentTitle } from 'utils'
 
 export const AuthenticatedApp = () => {
 	const { logout, user } = useAuth()
-	useDocumentTitle('项目列表')
+	useDocumentTitle('项目列表', false)
 	return (
 		<Container>
 			<Header between={true}>
