@@ -8,9 +8,9 @@ import { User } from './search-panel'
 
 // TODO 把所有ID改为number
 export interface Project {
-	id: string
+	id: number
 	name: string
-	personId: string
+	personId: number
 	pin: boolean
 	organization: string
 	created: number

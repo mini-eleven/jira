@@ -8,11 +8,11 @@ import { useProjects } from 'utils/project'
 import { useUsers } from 'utils/user'
 import { Test } from './test'
 import { useUrlQueryParam } from 'utils/url'
+import { useProjectSearchParams } from './util'
 
 export const ProjectListScreen = () => {
-	const [param, setParam] = useUrlQueryParam(['name', 'personId'])
-	const debouncedParam = useDebounce(param, 200)
-	const { data: list, isLoading, error } = useProjects(debouncedParam)
+	const [param, setParam] = useProjectSearchParams()
+	const { data: list, isLoading, error } = useProjects(useDebounce(param, 200))
 	const { data: users } = useUsers()
 
 	return (
