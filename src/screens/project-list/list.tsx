@@ -1,8 +1,12 @@
 import { Table, TableProps } from 'antd'
 import dayjs from 'dayjs'
 import React from 'react'
+// react-router 和 react-router-dom 的关系 类似于 react 和react-dom/react-native
+// react-router 主要用来管理路由状态, react-router-dom消费其计算结果
+import { Link } from 'react-router-dom'
 import { User } from './search-panel'
 
+// TODO 把所有ID改为number
 export interface Project {
 	id: string
 	name: string
@@ -24,7 +28,9 @@ export const List = ({ users, ...props }: IListProps) => {
 			columns={[
 				{
 					title: '名称',
-					dataIndex: 'name',
+					render(value, project) {
+						return <Link to={String(project.id)}>{project.name}</Link>
+					},
 					sorter: (a, b) => a.name.localeCompare(b.name),
 				},
 				{
