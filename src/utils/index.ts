@@ -49,3 +49,19 @@ export const useDebounce = <T>(value: T, delay?: number) => {
     }, [value, delay])
     return debouncedValue
 }
+
+export const useDocumentTitle = (title: string, keepOnUmmount: boolean = true) => {
+    const oldTitle = document.title
+
+    useEffect(() => {
+        document.title = title
+    }, [title])
+
+    useEffect(() => {
+        return () => {
+            if (!keepOnUmmount) {
+                document.title = oldTitle
+            }
+        }
+    }, [])
+}

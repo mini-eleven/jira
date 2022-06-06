@@ -5,9 +5,11 @@ import React from 'react'
 import { ProjectListScreen } from 'screens/project-list'
 import { ReactComponent as Logo } from 'assets/logo.svg'
 import { Button, Dropdown, Menu } from 'antd'
+import { useDocumentTitle } from 'utils'
 
 export const AuthenticatedApp = () => {
 	const { logout, user } = useAuth()
+	useDocumentTitle('项目列表')
 	return (
 		<Container>
 			<Header between={true}>
