@@ -5,33 +5,19 @@ import { cleanObject, useDebounce, useMount } from 'utils'
 import { useHttp } from 'utils/http'
 import styled from '@emotion/styled'
 import { Typography } from 'antd'
+import { useAsync } from 'utils/use-async'
+import { Project } from './list'
+import { useProjects } from 'utils/project'
+import { useUsers } from 'utils/user'
 
 export const ProjectListScreen = () => {
-	const [users, setUsers] = useState([])
 	const [param, setParam] = useState({
 		name: '',
 		personId: '',
 	})
 	const debouncedParam = useDebounce(param, 200)
-	const [list, setList] = useState([])
-	const client = useHttp()
-	const [isLoading, setIsLoading] = useState(false)
-	const [error, setError] = useState<Error | null>(null)
-
-	useEffect(() => {
-		setIsLoading(true)
-		client('projects', { data: cleanObject(debouncedParam) })
-			.then(setList)
-			.catch((error) => {
-				setList([])
-				setError(error)
-			})
-			.finally(() => setIsLoading(false))
-	}, [debouncedParam])
-
-	useMount(() => {
-		client('users').then(setUsers)
-	})
+	const { data: list, isLoading, error } = useProjects(debouncedParam)
+	const { data: users } = useUsers()
 
 	return (
 		<Container>
@@ -39,12 +25,16 @@ export const ProjectListScreen = () => {
 			<SearchPanel
 				param={param}
 				setParam={setParam}
-				users={users}
+				users={users || []}
 			></SearchPanel>
 			{error ? (
 				<Typography.Text type={'danger'}>{error.message}</Typography.Text>
 			) : null}
-			<List loading={isLoading} dataSource={list} users={users}></List>
+			<List
+				loading={isLoading}
+				dataSource={list || []}
+				users={users || []}
+			></List>
 		</Container>
 	)
 }
