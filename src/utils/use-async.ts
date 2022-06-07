@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { useMountedRef } from "utils"
 
 interface State<T> {
@@ -32,20 +32,20 @@ export const useAsync = <T>(initialState?: State<T>, initialConfig?: typeof defa
     const mountedRef = useMountedRef()
     const [retry, setRetry] = useState(() => () => { })
 
-    const setData = (data: T) => setState({
+    const setData = useCallback((data: T) => setState({
         data,
         stat: 'success',
         error: null
-    })
+    }), [])
 
-    const setError = (error: Error) => setState({
+    const setError = useCallback((error: Error) => setState({
         error,
         stat: 'error',
         data: null
-    })
+    }), [])
 
     // run用来触发异步请求
-    const run = (promise: Promise<T>, runConfig?: { retry: () => Promise<T> }) => {
+    const run = useCallback((promise: Promise<T>, runConfig?: { retry: () => Promise<T> }) => {
         if (!promise || !promise.then) {
             throw new Error('请传入promise类型数据')
         }
@@ -55,7 +55,8 @@ export const useAsync = <T>(initialState?: State<T>, initialConfig?: typeof defa
             }
         })
         // 设置loading
-        setState({ ...state, stat: 'loading' })
+        // 用prevState, 然后返回prevState处理后的值, 这样就不会用到State, 否则useCallback 会因为state无限循环
+        setState(prevState => ({ ...prevState, stat: 'loading' }))
         return promise.then(data => {
             // 确保组件加载(渲染)完成之后再setData
             if (mountedRef.current) {
@@ -68,7 +69,7 @@ export const useAsync = <T>(initialState?: State<T>, initialConfig?: typeof defa
                 return Promise.reject(error)
             return error
         })
-    }
+    }, [config.throwOnError, mountedRef, setData, setError])
 
     return {
         isIdle: state.stat === 'idle',
