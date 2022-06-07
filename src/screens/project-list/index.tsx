@@ -9,8 +9,13 @@ import { useUsers } from 'utils/user'
 import { Test } from './test'
 import { useUrlQueryParam } from 'utils/url'
 import { useProjectSearchParams } from './util'
+import { Row } from 'components/lib'
 
-export const ProjectListScreen = () => {
+export const ProjectListScreen = ({
+	projectButton
+}: {
+	projectButton: JSX.Element
+}) => {
 	const [param, setParam] = useProjectSearchParams()
 	const {
 		data: list,
@@ -22,7 +27,10 @@ export const ProjectListScreen = () => {
 
 	return (
 		<Container>
-			<h1>项目列表</h1>
+			<Row between={true}>
+				<h1>项目列表</h1>
+				{projectButton}
+			</Row>
 			<SearchPanel
 				param={param}
 				setParam={setParam}
@@ -32,6 +40,7 @@ export const ProjectListScreen = () => {
 				<Typography.Text type={'danger'}>{error.message}</Typography.Text>
 			) : null}
 			<List
+				projectButton={projectButton}
 				refresh={retry}
 				loading={isLoading}
 				dataSource={list || []}
