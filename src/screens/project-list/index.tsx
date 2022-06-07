@@ -12,7 +12,7 @@ import { useProjectSearchParams } from './util'
 import { Row } from 'components/lib'
 
 export const ProjectListScreen = ({
-	projectButton
+	projectButton,
 }: {
 	projectButton: JSX.Element
 }) => {

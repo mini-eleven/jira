@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback, useReducer, useState } from "react"
 import { useMountedRef } from "utils"
 
 interface State<T> {
@@ -17,9 +17,15 @@ const defaultConfig = {
     throwOnError: false
 }
 
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
+    const mountedRef = useMountedRef()
+    return useCallback((...args: T[]) => (mountedRef.current ? dispatch(...args) : void 0), [mountedRef, dispatch])
+}
+
 export const useAsync = <T>(initialState?: State<T>, initialConfig?: typeof defaultConfig) => {
     const config = { ...defaultConfig, ...initialConfig }
-    const [state, setState] = useState<State<T>>({
+    // 这个reducer (state, action) => () 如何返回新的state呢? 实际上就是将新的值赋值过去, 新的值在action中(可以理解为action.payoload)
+    const [state, dispatch] = useReducer((state: State<T>, action: Partial<State<T>>) => ({ ...state, ...action }), {
         ...defaultInitialState,
         ...initialState
     })
@@ -29,20 +35,20 @@ export const useAsync = <T>(initialState?: State<T>, initialConfig?: typeof defa
     //     const initialState = someExpensiveComputation(props);
     //     return initialState;
     // });
-    const mountedRef = useMountedRef()
+    const safeDispatch = useSafeDispatch(dispatch)
     const [retry, setRetry] = useState(() => () => { })
 
-    const setData = useCallback((data: T) => setState({
+    const setData = useCallback((data: T) => safeDispatch({
         data,
         stat: 'success',
         error: null
-    }), [])
+    }), [safeDispatch])
 
-    const setError = useCallback((error: Error) => setState({
+    const setError = useCallback((error: Error) => safeDispatch({
         error,
         stat: 'error',
         data: null
-    }), [])
+    }), [safeDispatch])
 
     // run用来触发异步请求
     const run = useCallback((promise: Promise<T>, runConfig?: { retry: () => Promise<T> }) => {
@@ -56,12 +62,10 @@ export const useAsync = <T>(initialState?: State<T>, initialConfig?: typeof defa
         })
         // 设置loading
         // 用prevState, 然后返回prevState处理后的值, 这样就不会用到State, 否则useCallback 会因为state无限循环
-        setState(prevState => ({ ...prevState, stat: 'loading' }))
+        safeDispatch({ stat: 'loading' })
         return promise.then(data => {
             // 确保组件加载(渲染)完成之后再setData
-            if (mountedRef.current) {
-                setData(data)
-            }
+            setData(data)
             return data
         }).catch(error => {
             setError(error)
@@ -69,7 +73,7 @@ export const useAsync = <T>(initialState?: State<T>, initialConfig?: typeof defa
                 return Promise.reject(error)
             return error
         })
-    }, [config.throwOnError, mountedRef, setData, setError])
+    }, [config.throwOnError, setData, setError, safeDispatch])
 
     return {
         isIdle: state.stat === 'idle',
