@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useMountedRef } from "utils"
 
 interface State<T> {
     error: Error | null
@@ -28,7 +29,7 @@ export const useAsync = <T>(initialState?: State<T>, initialConfig?: typeof defa
     //     const initialState = someExpensiveComputation(props);
     //     return initialState;
     // });
-
+    const mountedRef = useMountedRef()
     const [retry, setRetry] = useState(() => () => { })
 
     const setData = (data: T) => setState({
@@ -56,7 +57,10 @@ export const useAsync = <T>(initialState?: State<T>, initialConfig?: typeof defa
         // 设置loading
         setState({ ...state, stat: 'loading' })
         return promise.then(data => {
-            setData(data)
+            // 确保组件加载(渲染)完成之后再setData
+            if (mountedRef.current) {
+                setData(data)
+            }
             return data
         }).catch(error => {
             setError(error)
