@@ -1,9 +1,11 @@
 import { Table, TableProps } from 'antd'
+import { Pin } from 'components/pin'
 import dayjs from 'dayjs'
 import React from 'react'
 // react-router 和 react-router-dom 的关系 类似于 react 和react-dom/react-native
 // react-router 主要用来管理路由状态, react-router-dom消费其计算结果
 import { Link } from 'react-router-dom'
+import { useEditProject } from 'utils/project'
 import { User } from './search-panel'
 
 // TODO 把所有ID改为number
@@ -18,14 +20,31 @@ export interface Project {
 
 interface IListProps extends TableProps<Project> {
 	users: User[]
+	refresh?: () => void
 }
 
 export const List = ({ users, ...props }: IListProps) => {
+	const { mutate } = useEditProject()
+	// 柯里化
+	const pinProject = (id: number) => (pin: boolean) =>
+		mutate({ id, pin }).then(props.refresh)
 	return (
 		<Table
 			rowKey={'id'}
 			pagination={false}
 			columns={[
+				{
+					title: <Pin checked={true} disabled={true} />,
+					render(value, project) {
+						return (
+							<Pin
+								checked={project.pin}
+								// js果然挺好玩
+								onCheckedChange={pinProject(project.id)}
+							/>
+						)
+					},
+				},
 				{
 					title: '名称',
 					render(value, project) {

@@ -12,7 +12,12 @@ import { useProjectSearchParams } from './util'
 
 export const ProjectListScreen = () => {
 	const [param, setParam] = useProjectSearchParams()
-	const { data: list, isLoading, error } = useProjects(useDebounce(param, 200))
+	const {
+		data: list,
+		isLoading,
+		error,
+		retry,
+	} = useProjects(useDebounce(param, 200))
 	const { data: users } = useUsers()
 
 	return (
@@ -27,6 +32,7 @@ export const ProjectListScreen = () => {
 				<Typography.Text type={'danger'}>{error.message}</Typography.Text>
 			) : null}
 			<List
+				refresh={retry}
 				loading={isLoading}
 				dataSource={list || []}
 				users={users || []}
