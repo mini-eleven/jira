@@ -29,8 +29,7 @@ export const List = ({ users, ...props }: IListProps) => {
 	const { mutate } = useEditProject()
 	const { open } = useProjectModal()
 	// 柯里化
-	const pinProject = (id: number) => (pin: boolean) =>
-		mutate({ id, pin }).then(props.refresh)
+	const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin })
 	return (
 		<Table
 			rowKey={'id'}
