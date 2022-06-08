@@ -1,37 +1,41 @@
 import { useCallback, useEffect } from "react"
-import { useMutation, useQuery, useQueryClient } from "react-query"
+import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query"
 import { Project } from "screens/project-list/list"
+import { useProjectSearchParams } from "screens/project-list/util"
 import { cleanObject } from "utils"
 import { useHttp } from "./http"
 import { useAsync } from "./use-async"
+import { useAddConfig, useDeleteConfig, useEditConfig } from "./use-optimistic-options"
 
 export const useProjects = (param?: Partial<Project>) => {
     const client = useHttp()
     return useQuery<Project[]>(['projects', param], () => client('projects', { data: param }))
 }
 
-export const useEditProject = () => {
+export const useEditProject = (queryKey: QueryKey) => {
     const client = useHttp()
-    const qc = useQueryClient()
     return useMutation((params: Partial<Project>) =>
         client(`projects/${params.id}`, {
             data: params,
             method: 'PATCH'
-        }), {
-        onSuccess: () => qc.invalidateQueries('projects')
-    })
+        }), useEditConfig(queryKey))
 }
 
-export const useAddProject = () => {
+export const useAddProject = (queryKey: QueryKey) => {
     const client = useHttp()
-    const qc = useQueryClient()
     return useMutation((params: Partial<Project>) =>
         client(`projects`, {
             data: params,
             method: 'POST'
-        }), {
-        onSuccess: () => qc.invalidateQueries('projects')
-    })
+        }), useAddConfig(queryKey))
+}
+
+export const useDeleteProject = (queryKey: QueryKey) => {
+    const client = useHttp()
+    return useMutation(({ id }: { id: number }) =>
+        client(`projects/${id}`, {
+            method: 'DELETE'
+        }), useDeleteConfig(queryKey))
 }
 
 export const useProject = (id?: number) => {
