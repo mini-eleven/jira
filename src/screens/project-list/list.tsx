@@ -7,18 +7,9 @@ import React from 'react'
 // react-router 主要用来管理路由状态, react-router-dom消费其计算结果
 import { Link } from 'react-router-dom'
 import { useDeleteProject, useEditProject } from 'utils/project'
+import { Project } from 'types/Project'
 import { User } from './search-panel'
 import { useProjectModal, useProjectsQueryKey } from './util'
-
-// TODO 把所有ID改为number
-export interface Project {
-	id: number
-	name: string
-	personId: number
-	pin: boolean
-	organization: string
-	created: number
-}
 
 interface IListProps extends TableProps<Project> {
 	users: User[]

@@ -2,7 +2,7 @@
 import { Form, Input, Select } from 'antd'
 import { UserSelect } from 'components/user-select'
 import React, { useEffect, useState } from 'react'
-import { Project } from './list'
+import { Project } from 'types/Project'
 
 export interface User {
 	id: number
