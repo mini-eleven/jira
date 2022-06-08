@@ -9,16 +9,11 @@ import { useUsers } from 'utils/user'
 import { Test } from './test'
 import { useUrlQueryParam } from 'utils/url'
 import { useProjectModal, useProjectSearchParams } from './util'
-import { ButtonNoPadding, Row } from 'components/lib'
+import { ButtonNoPadding, ErrorBox, Row } from 'components/lib'
 
 export const ProjectListScreen = () => {
 	const [param, setParam] = useProjectSearchParams()
-	const {
-		data: list,
-		isLoading,
-		error,
-		retry,
-	} = useProjects(useDebounce(param, 200))
+	const { data: list, isLoading, error } = useProjects(useDebounce(param, 200))
 	const { data: users } = useUsers()
 	const { open } = useProjectModal()
 
@@ -35,11 +30,8 @@ export const ProjectListScreen = () => {
 				setParam={setParam}
 				users={users || []}
 			></SearchPanel>
-			{error ? (
-				<Typography.Text type={'danger'}>{error.message}</Typography.Text>
-			) : null}
+			<ErrorBox error={error} />
 			<List
-				refresh={retry}
 				loading={isLoading}
 				dataSource={list || []}
 				users={users || []}
