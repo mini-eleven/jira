@@ -8,6 +8,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useEditProject } from 'utils/project'
 import { User } from './search-panel'
+import { useProjectModal } from './util'
 
 // TODO 把所有ID改为number
 export interface Project {
@@ -22,11 +23,11 @@ export interface Project {
 interface IListProps extends TableProps<Project> {
 	users: User[]
 	refresh?: () => void
-	projectButton: JSX.Element
 }
 
 export const List = ({ users, ...props }: IListProps) => {
 	const { mutate } = useEditProject()
+	const { open } = useProjectModal()
 	// 柯里化
 	const pinProject = (id: number) => (pin: boolean) =>
 		mutate({ id, pin }).then(props.refresh)
@@ -87,7 +88,11 @@ export const List = ({ users, ...props }: IListProps) => {
 							<Dropdown
 								overlay={
 									<Menu>
-										<Menu.Item key={'edit'}>{props.projectButton}</Menu.Item>
+										<Menu.Item key={'edit'}>
+											<ButtonNoPadding type="link" onClick={open}>
+												创建项目
+											</ButtonNoPadding>
+										</Menu.Item>
 										<Menu.Item key={'delete'}>
 											<ButtonNoPadding type="link">删除</ButtonNoPadding>
 										</Menu.Item>
