@@ -3,10 +3,12 @@ import { ButtonNoPadding } from 'components/lib'
 import { Pin } from 'components/pin'
 import dayjs from 'dayjs'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 // react-router 和 react-router-dom 的关系 类似于 react 和react-dom/react-native
 // react-router 主要用来管理路由状态, react-router-dom消费其计算结果
 import { Link } from 'react-router-dom'
 import { useEditProject } from 'utils/project'
+import { projectListActions } from './project-list-slice'
 import { User } from './search-panel'
 
 // TODO 把所有ID改为number
@@ -22,7 +24,6 @@ export interface Project {
 interface IListProps extends TableProps<Project> {
 	users: User[]
 	refresh?: () => void
-	projectButton: JSX.Element
 }
 
 export const List = ({ users, ...props }: IListProps) => {
@@ -30,6 +31,7 @@ export const List = ({ users, ...props }: IListProps) => {
 	// 柯里化
 	const pinProject = (id: number) => (pin: boolean) =>
 		mutate({ id, pin }).then(props.refresh)
+	const dispatch = useDispatch()
 	return (
 		<Table
 			rowKey={'id'}
@@ -87,7 +89,16 @@ export const List = ({ users, ...props }: IListProps) => {
 							<Dropdown
 								overlay={
 									<Menu>
-										<Menu.Item key={'edit'}>{props.projectButton}</Menu.Item>
+										<Menu.Item key={'edit'}>
+											<ButtonNoPadding
+												onClick={() =>
+													dispatch(projectListActions.openProjectModal())
+												}
+												type="link"
+											>
+												编辑
+											</ButtonNoPadding>
+										</Menu.Item>
 										<Menu.Item key={'delete'}>
 											<ButtonNoPadding type="link">删除</ButtonNoPadding>
 										</Menu.Item>

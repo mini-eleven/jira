@@ -9,13 +9,11 @@ import { useUsers } from 'utils/user'
 import { Test } from './test'
 import { useUrlQueryParam } from 'utils/url'
 import { useProjectSearchParams } from './util'
-import { Row } from 'components/lib'
+import { ButtonNoPadding, Row } from 'components/lib'
+import { projectListActions } from './project-list-slice'
+import { useDispatch } from 'react-redux'
 
-export const ProjectListScreen = ({
-	projectButton,
-}: {
-	projectButton: JSX.Element
-}) => {
+export const ProjectListScreen = () => {
 	const [param, setParam] = useProjectSearchParams()
 	const {
 		data: list,
@@ -24,12 +22,18 @@ export const ProjectListScreen = ({
 		retry,
 	} = useProjects(useDebounce(param, 200))
 	const { data: users } = useUsers()
+	const dispatch = useDispatch()
 
 	return (
 		<Container>
 			<Row between={true}>
 				<h1>项目列表</h1>
-				{projectButton}
+				<ButtonNoPadding
+					onClick={() => dispatch(projectListActions.openProjectModal())}
+					type="link"
+				>
+					创建项目
+				</ButtonNoPadding>
 			</Row>
 			<SearchPanel
 				param={param}
@@ -40,7 +44,6 @@ export const ProjectListScreen = ({
 				<Typography.Text type={'danger'}>{error.message}</Typography.Text>
 			) : null}
 			<List
-				projectButton={projectButton}
 				refresh={retry}
 				loading={isLoading}
 				dataSource={list || []}
