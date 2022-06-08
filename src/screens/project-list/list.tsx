@@ -27,7 +27,8 @@ interface IListProps extends TableProps<Project> {
 
 export const List = ({ users, ...props }: IListProps) => {
 	const { mutate } = useEditProject()
-	const { open } = useProjectModal()
+	const { startEdit } = useProjectModal()
+	const editProject = (id: number) => () => startEdit(id)
 	// 柯里化
 	const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin })
 	return (
@@ -88,8 +89,11 @@ export const List = ({ users, ...props }: IListProps) => {
 								overlay={
 									<Menu>
 										<Menu.Item key={'edit'}>
-											<ButtonNoPadding type="link" onClick={open}>
-												创建项目
+											<ButtonNoPadding
+												type="link"
+												onClick={editProject(project.id)}
+											>
+												编辑
 											</ButtonNoPadding>
 										</Menu.Item>
 										<Menu.Item key={'delete'}>

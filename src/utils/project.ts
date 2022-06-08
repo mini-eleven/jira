@@ -7,7 +7,6 @@ import { useAsync } from "./use-async"
 
 export const useProjects = (param?: Partial<Project>) => {
     const client = useHttp()
-
     return useQuery<Project[]>(['projects', param], () => client('projects', { data: param }))
 }
 
@@ -27,10 +26,17 @@ export const useAddProject = () => {
     const client = useHttp()
     const qc = useQueryClient()
     return useMutation((params: Partial<Project>) =>
-        client(`projects/${params.id}`, {
+        client(`projects`, {
             data: params,
             method: 'POST'
         }), {
         onSuccess: () => qc.invalidateQueries('projects')
+    })
+}
+
+export const useProject = (id?: number) => {
+    const client = useHttp()
+    return useQuery<Project>(['project', { id }], () => client(`projects/${id}`), {
+        enabled: !!id //Boolean(id)
     })
 }
