@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useProject } from 'utils/project'
-import { useSetUrlParam, useUrlQueryParam } from "utils/url"
+import { useSetUrlSearchParam, useUrlQueryParam } from "utils/url"
 
 export const useProjectSearchParams = () => {
     const [param, setParam] = useUrlQueryParam(['name', 'personId'])
@@ -22,7 +22,7 @@ export const useProjectModal = () => {
     const [{ editingProjectId }, setEditingProjectId] = useUrlQueryParam(['editingProjectId'])
     // 不得已为之,
     // todo 找找原因和解决办法
-    const setUrlParam = useSetUrlParam()
+    const setUrlParam = useSetUrlSearchParam()
     const { data: editingProject, isLoading } = useProject(Number(editingProjectId))
 
     const open = () => setProjectCreate({ projectCreate: true })
