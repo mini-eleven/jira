@@ -10,7 +10,7 @@ import { Test } from './test'
 import { useUrlQueryParam } from 'utils/url'
 import { useProjectSearchParams } from './util'
 import { ButtonNoPadding, Row } from 'components/lib'
-import { projectListActions } from './project-list-slice'
+import { projectListActions } from '../../store/project-list/project-list-slice'
 import { useDispatch } from 'react-redux'
 
 export const ProjectListScreen = () => {

@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux'
 // react-router 主要用来管理路由状态, react-router-dom消费其计算结果
 import { Link } from 'react-router-dom'
 import { useEditProject } from 'utils/project'
-import { projectListActions } from './project-list-slice'
+import { projectListActions } from '../../store/project-list/project-list-slice'
 import { User } from './search-panel'
 
 // TODO 把所有ID改为number

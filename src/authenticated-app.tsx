@@ -12,10 +12,6 @@ import { ProjectScreen } from 'screens/project'
 import { ProjectPopover } from 'components/project-popover'
 import { ProjectModal } from 'screens/project-list/project-modal'
 import { useDispatch } from 'react-redux'
-import {
-	projectListActions,
-	projectListSlice,
-} from 'screens/project-list/project-list-slice'
 
 export const AuthenticatedApp = () => {
 	useDocumentTitle('项目列表', false)

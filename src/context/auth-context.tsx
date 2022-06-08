@@ -5,13 +5,15 @@ import { http } from 'utils/http'
 import { useMount } from 'utils'
 import { useAsync } from 'utils/use-async'
 import { FullPageErrorFallback, FullPageLoading } from 'components/lib'
+import * as authStore from 'store/auth/auth.slice'
+import { useDispatch, useSelector } from 'react-redux'
 
-interface AuthForm {
+export interface AuthForm {
 	username: string
 	password: string
 }
 
-const bootstrapUser = async () => {
+export const bootstrapUser = async () => {
 	let user = null
 	const token = auth.getToken()
 	if (token) {
@@ -76,5 +78,8 @@ export const useAuth = () => {
 	if (!context) {
 		throw new Error('useAuth必须在AuthProvider中使用')
 	}
+	// const dispatch = useDispatch()
+	// const user = useSelector(authStore.selectUser)
+	// const login = (form: AuthForm) => dispatch(authStore.login(form))
 	return context
 }
