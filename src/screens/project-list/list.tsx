@@ -8,7 +8,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useDeleteProject, useEditProject } from 'utils/project'
 import { Project } from 'types/Project'
-import { User } from './search-panel'
+import { User } from "../../types/User"
 import { useProjectModal, useProjectsQueryKey } from './util'
 
 interface IListProps extends TableProps<Project> {
