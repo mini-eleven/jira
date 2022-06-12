@@ -2,13 +2,13 @@
 /* tslint:disable */
 
 /**
- * Mock Service Worker (0.42.0).
+ * Mock Service Worker (0.42.1).
  * @see https://github.com/mswjs/msw
  * - Please do NOT modify this file.
  * - Please do NOT serve this file on production.
  */
 
-const INTEGRITY_CHECKSUM = '65d33ca82955e1c5928aed19d1bdf3f9'
+const INTEGRITY_CHECKSUM = '02f4ad4a2797f85668baf196e553d929'
 const bypassHeaderName = 'x-msw-bypass'
 const activeClientIds = new Set()
 
