@@ -7,8 +7,8 @@ import React from 'react'
 // react-router 主要用来管理路由状态, react-router-dom消费其计算结果
 import { Link } from 'react-router-dom'
 import { useDeleteProject, useEditProject } from 'utils/project'
-import { Project } from 'types/Project'
-import { User } from "../../types/User"
+import { Project } from 'types/project'
+import { User } from "types/user"
 import { useProjectModal, useProjectsQueryKey } from './util'
 
 interface IListProps extends TableProps<Project> {

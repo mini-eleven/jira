@@ -1,6 +1,6 @@
 // 在真是环境中, 如果使用firebase这种第三方base服务的话, 本文件不需要开发者开发
 
-import { User } from "types/User"
+import { User } from "types/user"
 
 const apiUrl = process.env.REACT_APP_API_URL
 const localStorageKey = '__auth_provider_token__'
